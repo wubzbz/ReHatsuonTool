@@ -34,7 +34,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: python
-          key: python-3.13.13-embed-v1
+          key: python-3.13.13-embed-v2
 
       - name: Download Python 3.13 embedded
         if: steps.cache-python.outputs.cache-hit != 'true'
@@ -44,6 +44,17 @@ jobs:
           Invoke-WebRequest -Uri "https://www.python.org/ftp/python/3.13.13/python-3.13.13-embed-amd64.zip" -OutFile $zipPath
           Expand-Archive -Path $zipPath -DestinationPath python -Force
           Remove-Item $zipPath
+
+      - name: Configure embedded Python path
+        if: steps.cache-python.outputs.cache-hit != 'true'
+        shell: pwsh
+        working-directory: python
+        run: |
+          # Append Lib\site-packages to .pth so pip and packages are importable
+          $pth = "python313._pth"
+          if (-not (Select-String -Path $pth -Pattern "Lib\\site-packages" -SimpleMatch)) {
+            Add-Content -Path $pth -Value "Lib\site-packages"
+          }
 
       - name: Setup pip and install packages
         if: steps.cache-python.outputs.cache-hit != 'true'
