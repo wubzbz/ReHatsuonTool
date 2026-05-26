@@ -1,0 +1,122 @@
+name: CD
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+      
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Read version from csproj
+        id: version
+        shell: pwsh
+        run: |
+          [xml]$csproj = Get-Content "ReHatsuonTool\ReHatsuonTool.csproj"
+          $ver = $csproj.Project.PropertyGroup.Version
+          if (-not $ver) { $ver = "0.0.0" }
+          echo "version=$ver" >> $env:GITHUB_OUTPUT
+          echo "Version: $ver"
+
+      - name: Cache Python runtime
+        id: cache-python
+        uses: actions/cache@v4
+        with:
+          path: ReHatsuonTool/python
+          key: python-3.13.13-embed-v1
+
+      - name: Download Python 3.13 embedded
+        if: steps.cache-python.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          $pythonDir = "ReHatsuonTool\python"
+          $zipPath = "${{ runner.temp }}\python-embed.zip"
+          Invoke-WebRequest -Uri "https://www.python.org/ftp/python/3.13.13/python-3.13.13-embed-amd64.zip" -OutFile $zipPath
+          Expand-Archive -Path $zipPath -DestinationPath $pythonDir -Force
+          Remove-Item $zipPath
+
+      - name: Setup pip and install packages
+        if: steps.cache-python.outputs.cache-hit != 'true'
+        shell: pwsh
+        working-directory: ReHatsuonTool/python
+        run: |
+          # Download get-pip.py
+          Invoke-WebRequest -Uri "https://bootstrap.pypa.io/get-pip.py" -OutFile "get-pip.py"
+          # Install pip
+          .\python.exe get-pip.py --no-warn-script-location
+          # Install setuptools and wheel first
+          .\python.exe -m pip install setuptools wheel --no-warn-script-location
+          # Install yukkuri-mandarin with jieba
+          .\python.exe -m pip install yukkuri-mandarin[jieba] --no-warn-script-location
+          # Cleanup runtime bloat
+          Remove-Item get-pip.py -Force
+          Remove-Item pythonw.exe -Force -ErrorAction SilentlyContinue
+          Remove-Item LICENSE.txt -Force -ErrorAction SilentlyContinue
+          Remove-Item python.cat -Force -ErrorAction SilentlyContinue
+          Remove-Item _remote_debugging.pyd -Force -ErrorAction SilentlyContinue
+          Remove-Item _wmi.pyd -Force -ErrorAction SilentlyContinue
+          if (Test-Path "Scripts") { Remove-Item "Scripts" -Recurse -Force }
+          # Remove pip/setuptools/wheel from site-packages
+          $sp = "Lib\site-packages"
+          foreach ($d in @("pip", "pip-*.dist-info", "setuptools", "setuptools-*.dist-info", "wheel", "wheel-*.dist-info")) {
+            Remove-Item "$sp\$d" -Recurse -Force -ErrorAction SilentlyContinue
+          }
+
+      - name: Publish (Lite - depends on .NET runtime)
+        shell: pwsh
+        run: |
+          dotnet publish ReHatsuonTool/ReHatsuonTool.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained false `
+            -p:PublishSingleFile=false `
+            -o publish-lite
+
+      - name: Publish (Full - self-contained)
+        shell: pwsh
+        run: |
+          dotnet publish ReHatsuonTool/ReHatsuonTool.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained true `
+            -p:PublishSingleFile=false `
+            -o publish-full
+
+      - name: Package Lite
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          $name = "ReHatsuonTool-v$version-win-x64-lite.zip"
+          Compress-Archive -Path publish-lite\* -DestinationPath $name
+          echo "lite=$name" >> $env:GITHUB_OUTPUT
+        id: pkg-lite
+
+      - name: Package Full
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          $name = "ReHatsuonTool-v$version-win-x64.zip"
+          Compress-Archive -Path publish-full\* -DestinationPath $name
+          echo "full=$name" >> $env:GITHUB_OUTPUT
+        id: pkg-full
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: v${{ steps.version.outputs.version }}
+          files: |
+            ${{ steps.pkg-lite.outputs.lite }}
+            ${{ steps.pkg-full.outputs.full }}
+          generate_release_notes: true
