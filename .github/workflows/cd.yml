@@ -23,7 +23,7 @@ jobs:
         id: version
         shell: pwsh
         run: |
-          [xml]$csproj = Get-Content "ReHatsuonTool\ReHatsuonTool.csproj"
+          [xml]$csproj = Get-Content "ReHatsuonTool.csproj"
           $ver = $csproj.Project.PropertyGroup.Version
           if (-not $ver) { $ver = "0.0.0" }
           echo "version=$ver" >> $env:GITHUB_OUTPUT
@@ -33,23 +33,22 @@ jobs:
         id: cache-python
         uses: actions/cache@v4
         with:
-          path: ReHatsuonTool/python
+          path: python
           key: python-3.13.13-embed-v1
 
       - name: Download Python 3.13 embedded
         if: steps.cache-python.outputs.cache-hit != 'true'
         shell: pwsh
         run: |
-          $pythonDir = "ReHatsuonTool\python"
           $zipPath = "${{ runner.temp }}\python-embed.zip"
           Invoke-WebRequest -Uri "https://www.python.org/ftp/python/3.13.13/python-3.13.13-embed-amd64.zip" -OutFile $zipPath
-          Expand-Archive -Path $zipPath -DestinationPath $pythonDir -Force
+          Expand-Archive -Path $zipPath -DestinationPath python -Force
           Remove-Item $zipPath
 
       - name: Setup pip and install packages
         if: steps.cache-python.outputs.cache-hit != 'true'
         shell: pwsh
-        working-directory: ReHatsuonTool/python
+        working-directory: python
         run: |
           # Download get-pip.py
           Invoke-WebRequest -Uri "https://bootstrap.pypa.io/get-pip.py" -OutFile "get-pip.py"
@@ -76,7 +75,7 @@ jobs:
       - name: Publish (Lite - depends on .NET runtime)
         shell: pwsh
         run: |
-          dotnet publish ReHatsuonTool/ReHatsuonTool.csproj `
+          dotnet publish ReHatsuonTool.csproj `
             -c Release `
             -r win-x64 `
             --self-contained false `
@@ -86,7 +85,7 @@ jobs:
       - name: Publish (Full - self-contained)
         shell: pwsh
         run: |
-          dotnet publish ReHatsuonTool/ReHatsuonTool.csproj `
+          dotnet publish ReHatsuonTool.csproj `
             -c Release `
             -r win-x64 `
             --self-contained true `
