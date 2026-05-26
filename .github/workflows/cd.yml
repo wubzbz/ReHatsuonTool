@@ -73,7 +73,7 @@ jobs:
             Remove-Item "$sp\$d" -Recurse -Force -ErrorAction SilentlyContinue
           }
 
-      - name: Publish
+      - name: Publish (Lite - depends on .NET runtime)
         shell: pwsh
         run: |
           dotnet publish ReHatsuonTool/ReHatsuonTool.csproj `
@@ -81,21 +81,42 @@ jobs:
             -r win-x64 `
             --self-contained false `
             -p:PublishSingleFile=false `
-            -o publish
+            -o publish-lite
 
-      - name: Package artifact
+      - name: Publish (Full - self-contained)
+        shell: pwsh
+        run: |
+          dotnet publish ReHatsuonTool/ReHatsuonTool.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained true `
+            -p:PublishSingleFile=false `
+            -o publish-full
+
+      - name: Package Lite
         shell: pwsh
         run: |
           $version = "${{ steps.version.outputs.version }}"
-          $artifactName = "ReHatsuonTool-v$version-win-x64.zip"
-          Compress-Archive -Path publish\* -DestinationPath $artifactName
-          echo "artifact=$artifactName" >> $env:GITHUB_OUTPUT
-        id: package
+          $name = "ReHatsuonTool-v$version-win-x64-lite.zip"
+          Compress-Archive -Path publish-lite\* -DestinationPath $name
+          echo "lite=$name" >> $env:GITHUB_OUTPUT
+        id: pkg-lite
+
+      - name: Package Full
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          $name = "ReHatsuonTool-v$version-win-x64.zip"
+          Compress-Archive -Path publish-full\* -DestinationPath $name
+          echo "full=$name" >> $env:GITHUB_OUTPUT
+        id: pkg-full
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.version.outputs.version }}
           name: v${{ steps.version.outputs.version }}
-          files: ${{ steps.package.outputs.artifact }}
+          files: |
+            ${{ steps.pkg-lite.outputs.lite }}
+            ${{ steps.pkg-full.outputs.full }}
           generate_release_notes: true
