@@ -1,6 +1,8 @@
-using System.IO;
+﻿using System.IO;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+
+using ReHatsuonTool.Localization;
 
 namespace ReHatsuonTool.Services;
 
@@ -15,21 +17,21 @@ public static class YmmpAppender
         IEnumerable<(string CharacterName, string Serif, string Hatsuon)> lines)
     {
         if (!File.Exists(ymmpPath))
-            return new AppendResult(false, "ymmp file not found", 0);
+            return new AppendResult(false, Texts.YmmpAppendFileNotFound, 0);
 
         var validLines = lines.Where(l => !string.IsNullOrWhiteSpace(l.Serif)).ToList();
         if (validLines.Count == 0)
-            return new AppendResult(false, "no valid lines", 0);
+            return new AppendResult(false, Texts.YmmpAppendNoValidLines, 0);
 
         try
         {
             var json = File.ReadAllText(ymmpPath);
             var root = JsonNode.Parse(json);
-            if (root == null) return new AppendResult(false, "JSON parse failed", 0);
+            if (root == null) return new AppendResult(false, Texts.YmmpAppendJsonParseFailed, 0);
 
             var timelines = root["Timelines"]?.AsArray();
             if (timelines == null || timelines.Count == 0)
-                return new AppendResult(false, "no Timelines found", 0);
+                return new AppendResult(false, Texts.YmmpAppendNoTimelinesFound, 0);
 
             // Find target timeline by name
             JsonNode? targetTimeline = null;
@@ -44,7 +46,7 @@ public static class YmmpAppender
             }
             targetTimeline ??= timelines[0];
             if (targetTimeline == null)
-                return new AppendResult(false, "timeline not found", 0);
+                return new AppendResult(false, Texts.YmmpAppendTimelineNotFound, 0);
 
             var items = targetTimeline["Items"]?.AsArray();
             if (items == null)

@@ -2,7 +2,7 @@ using System.Text;
 using System.Windows;
 using Python.Runtime;
 
-namespace HatsuonTool;
+namespace ReHatsuonTool;
 
 public partial class App : Application
 {

@@ -1,4 +1,4 @@
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using ReHatsuonTool.Localization;
 using ReHatsuonTool.Models;
 using ReHatsuonTool.Services;
@@ -89,10 +89,10 @@ public class SaveViewModel : BaseViewModel
     {
         var dialog = new SaveFileDialog
         {
-            Title = "导出 CSV 台本",
-            Filter = "CSV file (*.csv)|*.csv",
-            DefaultExt = "csv",
-            FileName = "script.csv"
+            Title = Texts.SaveCsvDialogTitle,
+            Filter = Texts.SaveCsvDialogFilter,
+            DefaultExt = Texts.SaveCsvDefaultExt,
+            FileName = Texts.SaveCsvDefaultFileName
         };
 
         if (dialog.ShowDialog() != true) return;
@@ -113,7 +113,7 @@ public class SaveViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            System.Windows.MessageBox.Show($"CSV export failed: {ex.Message}", "Error");
+            System.Windows.MessageBox.Show(string.Format(Texts.SaveCsvExportFailed, ex.Message), Texts.SaveMessageBoxErrorTitle);
         }
     }
 
