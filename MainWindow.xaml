@@ -1,4 +1,4 @@
-<Window x:Class="ReHatsuonTool.MainWindow"
+﻿<Window x:Class="ReHatsuonTool.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,8 +8,8 @@
         xmlns:conv="clr-namespace:ReHatsuonTool.Views"
         mc:Ignorable="d"
         Title="Re-Hatsuon Tool - 添加普通话语音物件"
-        Height="600" Width="880"
-        MinHeight="500" MinWidth="780"
+        Height="610" Width="880"
+        MinHeight="610" MinWidth="780"
         WindowStartupLocation="CenterScreen"
         Background="{DynamicResource MaterialDesignPaper}">
 
@@ -23,7 +23,7 @@
             <Setter Property="Background" Value="White" />
             <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignDivider}" />
             <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="Foreground" Value="#FF00675B" />
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}" />
             <Setter Property="FontWeight" Value="SemiBold" />
         </Style>
 
@@ -32,24 +32,63 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="RadioButton">
                         <Border x:Name="border"
-                                Background="Transparent"
-                                BorderBrush="Transparent"
+                                Background="#4AFFFFFF"
+                                BorderBrush="LightGray"
                                 BorderThickness="3,0,0,0"
-                                Padding="16,12"
+                                Padding="16,16"
                                 Cursor="Hand">
-                            <ContentPresenter
+                            <ContentPresenter x:Name="content"
                                 VerticalAlignment="Center"
                                 TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
-                                TextBlock.FontSize="14" />
+                                TextBlock.FontFamily="Microsoft Sans Serif"
+                                TextBlock.FontSize="16"
+                                TextBlock.FontWeight="Bold"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
                                 <Setter TargetName="border" Property="Background" Value="#145C6B" />
                                 <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource PrimaryHueMidBrush}" />
-                                <Setter TargetName="border" Property="TextBlock.Foreground" Value="{DynamicResource PrimaryHueMidBrush}" />
+                                <Setter TargetName="content" Property="TextBlock.Foreground" Value="White" />
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="border" Property="Opacity" Value="0.4" />
+                                <Setter TargetName="content" Property="Opacity" Value="0.4" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="NavSaveButtonStyle" TargetType="RadioButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="border"
+                                BorderBrush="LightGray"
+                                BorderThickness="3,0,0,0"
+                                Padding="16,16"
+                                Cursor="Hand">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Color="#4AFFFFFF" Offset="0.8"/>
+                                    <GradientStop Color="#00FFFFFF" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <ContentPresenter x:Name="content"
+                                VerticalAlignment="Center"
+                                TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                                TextBlock.FontFamily="Microsoft Sans Serif"
+                                TextBlock.FontSize="16"
+                                TextBlock.FontWeight="Bold"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#145C6B" />
+                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource PrimaryHueMidBrush}" />
+                                <Setter TargetName="content" Property="TextBlock.Foreground" Value="White" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="content" Property="Opacity" Value="0.4" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -66,9 +105,10 @@
 
         <!-- NavSide -->
         <Border Grid.Column="0"
-                Background="{DynamicResource MaterialDesignCardBackground}"
+                Background="#FFFCE6B5"
                 BorderBrush="{DynamicResource MaterialDesignDivider}"
                 BorderThickness="0,0,1,0">
+
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -77,12 +117,30 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <Border Grid.Row="0"
-                        Background="{DynamicResource PrimaryHueMidBrush}"
-                        Padding="16,20">
-                    <TextBlock Text="Re-Hatsuon Tool"
-                               FontSize="18" FontWeight="SemiBold"
-                               Foreground="White" />
+                <Image Grid.Row="1" Grid.RowSpan="3"
+                       Source="/Images/nav-bg.png"
+                       Stretch="None"
+                       VerticalAlignment="Bottom"
+                       HorizontalAlignment="Stretch"
+                       Width="198"
+                       Panel.ZIndex="-1" />
+
+                <Border Grid.Row="0" Padding="16,28">
+                    <Border.Background>
+                        <ImageBrush ImageSource="/Images/Title-bar.png" Stretch="UniformToFill" />
+                    </Border.Background>
+                    <StackPanel>
+                        <TextBlock Text="Re-Hatsuon Tool"
+                                   FontSize="18"
+                                   FontWeight="SemiBold"
+                                   TextAlignment="Center"
+                                   Foreground="White" />
+                        <TextBlock Text="{Binding VersionText}"
+                                   FontSize="12"
+                                   TextAlignment="Right"
+                                   Foreground="#BAFFFFFF"
+                                   Margin="0,4,0,0" />
+                    </StackPanel>
                 </Border>
 
                 <StackPanel Grid.Row="1" Margin="0,16,0,0">
@@ -100,19 +158,30 @@
                                  Checked="NavAdd_Checked" />
 
                     <RadioButton x:Name="NavSave"
-                                 Style="{StaticResource NavButtonStyle}"
+                                 Style="{StaticResource NavSaveButtonStyle}"
                                  Content="保存到..."
                                  GroupName="Nav"
                                  IsEnabled="{Binding CanNavigateToSave}"
                                  Checked="NavSave_Checked" />
                 </StackPanel>
 
-                <TextBlock Grid.Row="3"
-                           Text="Re-Hatsuon Tool v1.0"
-                           FontSize="11"
-                           Foreground="{DynamicResource MaterialDesignHintForeground}"
+                <StackPanel Grid.Row="3" Margin="0,0,0,12" HorizontalAlignment="Center">
+                    <!-- Powered by Yukkuri-Mandarin badge -->
+                    <Image Source="/Images/badge.png"
+                           Width="170"
+                           Margin="0,0,0,8"
                            HorizontalAlignment="Center"
-                           Margin="0,0,0,12" />
+                           RenderOptions.BitmapScalingMode="HighQuality" />
+                    <!-- License -->
+                    <TextBlock Text="{Binding LicenseText}"
+                        FontSize="10"
+                        FontWeight="Bold"
+                        Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                        HorizontalAlignment="Center"
+                        TextAlignment="Center"
+                        TextWrapping="Wrap" />
+                    
+                </StackPanel>
             </Grid>
         </Border>
 
@@ -449,10 +518,10 @@
                                             <RowDefinition Height="Auto" />
                                         </Grid.RowDefinitions>
 
-                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="路  径:" FontWeight="SemiBold" FontSize="12" Margin="0,2" />
+                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="项目路径:" FontWeight="SemiBold" FontSize="12" Margin="0,2" />
                                         <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding YmmpPath}" FontSize="12" Margin="0,2" TextTrimming="CharacterEllipsis" />
 
-                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="时间线:" FontWeight="SemiBold" FontSize="12" Margin="0,2" />
+                                        <TextBlock Grid.Row="1" Grid.Column="0" Text=" 时 间 线:" FontWeight="SemiBold" FontSize="12" Margin="0,2" />
                                         <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding YmmpTimeline}" FontSize="12" Margin="0,2" />
 
                                         <TextBlock Grid.Row="2" Grid.Column="0" Text="已有物件:" FontWeight="SemiBold" FontSize="12" Margin="0,2" />
@@ -482,7 +551,7 @@
 
                                 <TextBlock Margin="0,8,0,0"
                                            FontSize="12"
-                                           Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                           Foreground="{DynamicResource PrimaryHueDarkBrush}"
                                            TextWrapping="Wrap"
                                            Text="{Binding AppendStatus}" />
                             </StackPanel>
