@@ -1,4 +1,6 @@
 using ReHatsuonTool.Models;
+using ReHatsuonTool.Localization;
+using System.Reflection;
 
 namespace ReHatsuonTool.ViewModels;
 
@@ -19,12 +21,19 @@ public class MainViewModel : BaseViewModel
     public AddLinesViewModel AddLinesViewModel { get; }
     public SaveViewModel SaveViewModel { get; }
 
+    public string VersionText { get; }
+    public string LicenseText { get; }
+
     public MainViewModel()
     {
         Config = AppConfig.Load();
         SetupViewModel = new SetupViewModel(Config);
         AddLinesViewModel = new AddLinesViewModel(Config);
         SaveViewModel = new SaveViewModel(Config, AddLinesViewModel);
+
+        var ver = Assembly.GetExecutingAssembly().GetName().Version;
+        VersionText = $"v{ver?.ToString(3) ?? Texts.UnknownVer}";
+        LicenseText = Texts.LicenseInfo;
 
         SetupViewModel.PropertyChanged += (_, e) =>
         {

@@ -1,11 +1,14 @@
 using ReHatsuonTool.ViewModels;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media.Animation;
 
 namespace ReHatsuonTool;
 
 public partial class MainWindow : Window
 {
     private readonly MainViewModel _viewModel;
+    private FrameworkElement? _currentPageGrid;
 
     public MainWindow()
     {
@@ -13,31 +16,58 @@ public partial class MainWindow : Window
         DataContext = _viewModel;
         InitializeComponent();
 
+        _currentPageGrid = SetupPage;
+        SetupPage.Opacity = 1.0;
+
         // Manually trigger initial page after all controls are loaded
         NavSetup.IsChecked = true;
+    }
+
+    private void SwitchPage(FrameworkElement showPage)
+    {
+        if (_currentPageGrid == showPage)
+            return;
+
+        var hidePage = _currentPageGrid;
+
+        if (hidePage != null)
+        {
+            var fadeOut = new DoubleAnimation(1.0, 0.0, TimeSpan.FromMilliseconds(150));
+            fadeOut.Completed += (_, _) =>
+            {
+                hidePage.Visibility = Visibility.Collapsed;
+
+                showPage.Visibility = Visibility.Visible;
+                showPage.Opacity = 0.0;
+                var fadeIn = new DoubleAnimation(0.0, 1.0, TimeSpan.FromMilliseconds(150));
+                showPage.BeginAnimation(UIElement.OpacityProperty, fadeIn);
+            };
+            hidePage.BeginAnimation(UIElement.OpacityProperty, fadeOut);
+        }
+        else
+        {
+            showPage.Visibility = Visibility.Visible;
+            showPage.Opacity = 1.0;
+        }
+
+        _currentPageGrid = showPage;
     }
 
     private void NavSetup_Checked(object sender, RoutedEventArgs e)
     {
         _viewModel.Navigate(PageType.Setup);
-        SetupPage.Visibility = Visibility.Visible;
-        AddLinesPage.Visibility = Visibility.Collapsed;
-        SavePage.Visibility = Visibility.Collapsed;
+        SwitchPage(SetupPage);
     }
 
     private void NavAdd_Checked(object sender, RoutedEventArgs e)
     {
         _viewModel.Navigate(PageType.AddLines);
-        SetupPage.Visibility = Visibility.Collapsed;
-        AddLinesPage.Visibility = Visibility.Visible;
-        SavePage.Visibility = Visibility.Collapsed;
+        SwitchPage(AddLinesPage);
     }
 
     private void NavSave_Checked(object sender, RoutedEventArgs e)
     {
         _viewModel.Navigate(PageType.Save);
-        SetupPage.Visibility = Visibility.Collapsed;
-        AddLinesPage.Visibility = Visibility.Collapsed;
-        SavePage.Visibility = Visibility.Visible;
+        SwitchPage(SavePage);
     }
 }

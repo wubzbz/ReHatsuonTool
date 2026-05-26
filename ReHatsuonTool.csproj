@@ -11,11 +11,14 @@
     <Version>1.0.0</Version>
     <RestorePackagesPath>..\ReHatsuonTool\packages</RestorePackagesPath>
     <RestoreSources>$(RestoreSources);..\ReHatsuonTool\packages</RestoreSources>
-    <ApplicationIcon>ReHatsuonTool.ico</ApplicationIcon>
+    <ApplicationIcon>Images\ReHatsuonTool.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="ReHatsuonTool.ico" />
+    <Content Include="Images\ReHatsuonTool.ico" />
+    <Resource Include="Images\Title-bar.png" />
+    <Resource Include="Images\nav-bg.png" />
+    <Resource Include="Images\badge.png" />
   </ItemGroup>
 
   <ItemGroup>
