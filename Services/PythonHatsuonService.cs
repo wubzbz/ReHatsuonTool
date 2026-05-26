@@ -1,6 +1,7 @@
-using Python.Runtime;
+﻿using Python.Runtime;
 using System.Diagnostics;
 using System.IO;
+using ReHatsuonTool.Localization;
 
 namespace ReHatsuonTool.Services;
 
@@ -31,7 +32,7 @@ public static class PythonHatsuonService
     public static string Diagnose()
     {
         if (!IsAvailable)
-            return $"Python DLL not found. Searched: {PythonDir}";
+            return string.Format(Texts.PythonDllNotFound, PythonDir);
         try
         {
             EnsureInitialized();
@@ -39,12 +40,13 @@ public static class PythonHatsuonService
             {
                 dynamic sys = Py.Import("sys");
                 string ver = sys.version.ToString();
-                return $"Python.NET OK. {ver.Split('\n')[0]}";
+                ver = ver.Split('\n')[0];
+                return string.Format(Texts.PythonNetOk, ver);
             }
         }
         catch (Exception ex)
         {
-            return $"Python.NET error: {ex.Message}";
+            return string.Format(Texts.PythonNetError, ex.Message);
         }
     }
 

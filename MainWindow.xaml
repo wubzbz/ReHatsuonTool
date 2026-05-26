@@ -6,6 +6,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:vm="clr-namespace:ReHatsuonTool.ViewModels"
         xmlns:conv="clr-namespace:ReHatsuonTool.Views"
+        xmlns:loc="clr-namespace:ReHatsuonTool.Localization"
         mc:Ignorable="d"
         Title="Re-Hatsuon Tool - 添加普通话语音物件"
         Height="610" Width="880"
@@ -146,20 +147,20 @@
                 <StackPanel Grid.Row="1" Margin="0,16,0,0">
                     <RadioButton x:Name="NavSetup"
                                  Style="{StaticResource NavButtonStyle}"
-                                 Content="初始设定"
+                                 Content="{x:Static loc:Texts.NavSetup}"
                                  GroupName="Nav"
                                  Checked="NavSetup_Checked" />
 
                     <RadioButton x:Name="NavAdd"
                                  Style="{StaticResource NavButtonStyle}"
-                                 Content="添加台词"
+                                 Content="{x:Static loc:Texts.NavAdd}"
                                  GroupName="Nav"
                                  IsEnabled="{Binding CanNavigateToAddLines}"
                                  Checked="NavAdd_Checked" />
 
                     <RadioButton x:Name="NavSave"
                                  Style="{StaticResource NavSaveButtonStyle}"
-                                 Content="保存到..."
+                                 Content="{x:Static loc:Texts.NavSave}"
                                  GroupName="Nav"
                                  IsEnabled="{Binding CanNavigateToSave}"
                                  Checked="NavSave_Checked" />
@@ -200,7 +201,7 @@
                 <Border Grid.Row="0"
                         Background="{DynamicResource PrimaryHueLightBrush}"
                         Padding="24,16">
-                    <TextBlock Text="初始设定"
+                    <TextBlock Text="{x:Static loc:Texts.SetupPageTitle}"
                                FontSize="20" FontWeight="SemiBold"
                                Foreground="{DynamicResource PrimaryHueDarkBrush}" />
                 </Border>
@@ -210,7 +211,7 @@
                         Padding="14,10" CornerRadius="0"
                         Background="{DynamicResource PrimaryHueMidBrush}"
                         Visibility="{Binding IsSetupComplete, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <TextBlock Text="初始设定已完成，可以开始编辑台词啦！"
+                    <TextBlock Text="{x:Static loc:Texts.SetupCompleteBanner}"
                                Foreground="White"
                                FontWeight="SemiBold" FontSize="13"
                                HorizontalAlignment="Center" />
@@ -222,7 +223,7 @@
                         <!-- YMM4 Card -->
                         <materialDesign:Card Margin="0,0,0,16" Padding="20">
                             <StackPanel>
-                                <TextBlock Text="1. 选择 YMM4 安装目录"
+                                <TextBlock Text="{x:Static loc:Texts.Ymm4StepTitle}"
                                            FontSize="17" FontWeight="SemiBold"
                                            Margin="0,0,0,12" />
 
@@ -233,7 +234,7 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBox Grid.Column="0"
                                              Text="{Binding Ymm4Directory, UpdateSourceTrigger=PropertyChanged}"
-                                             materialDesign:HintAssist.Hint="path/to/YukkuriMovieMaker/"
+                                             materialDesign:HintAssist.Hint="{x:Static loc:Texts.Ymm4StepHint}"
                                              VerticalAlignment="Center"
                                              Margin="0,0,8,0" />
                                     <Button Grid.Column="1"
@@ -273,7 +274,7 @@
                                         Padding="10,6" CornerRadius="4"
                                         Background="#FFF3F0"
                                         Visibility="{Binding IsYmm4Valid, Converter={StaticResource InverseBoolConverter}}">
-                                    <TextBlock Text="请选择YMM4所在的目录 (含有 YukkuriMovieMaker.exe)"
+                                    <TextBlock Text="{x:Static loc:Texts.Ymm4StepWarning}"
                                                Foreground="#CC3300" FontSize="12" />
                                 </Border>
                             </StackPanel>
@@ -282,7 +283,7 @@
                         <!-- Ymmp Card -->
                         <materialDesign:Card Padding="20">
                             <StackPanel>
-                                <TextBlock Text="2. 选择 ymmp 项目"
+                                <TextBlock Text="{x:Static loc:Texts.YmmpStepTitle}"
                                            FontSize="17" FontWeight="SemiBold"
                                            Margin="0,0,0,12" />
 
@@ -293,7 +294,7 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBox Grid.Column="0"
                                              Text="{Binding YmmpFilePath, UpdateSourceTrigger=PropertyChanged}"
-                                             materialDesign:HintAssist.Hint="YourProject.ymmp"
+                                             materialDesign:HintAssist.Hint="{x:Static loc:Texts.YmmpStepHint}"
                                              VerticalAlignment="Center"
                                              Margin="0,0,8,0" />
                                     <Button Grid.Column="1"
@@ -317,7 +318,7 @@
                                         Padding="10,6" CornerRadius="4"
                                         Background="#FFF3F0"
                                         Visibility="{Binding IsYmmpValid, Converter={StaticResource InverseBoolConverter}}">
-                                    <TextBlock Text="请选择有效的 ymmp 项目 (Timelines.Items 不能为空)"
+                                    <TextBlock Text="{x:Static loc:Texts.YmmpStepWarning}"
                                                Foreground="#CC3300" FontSize="12" />
                                 </Border>
                             </StackPanel>
@@ -341,7 +342,7 @@
                 <Border Grid.Row="0"
                         Background="{DynamicResource PrimaryHueLightBrush}"
                         Padding="24,16">
-                    <TextBlock Text="添加台词"
+                    <TextBlock Text="{x:Static loc:Texts.AddLinesPageTitle}"
                                FontSize="20" FontWeight="SemiBold"
                                Foreground="{DynamicResource PrimaryHueDarkBrush}" />
                 </Border>
@@ -354,7 +355,7 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Column="0" Text="时间线: " FontSize="14"
+                    <TextBlock Grid.Column="0" Text="{x:Static loc:Texts.AddLinesTimelineLabel}" FontSize="14"
                                VerticalAlignment="Center" FontWeight="SemiBold" />
                     <ComboBox Grid.Column="1"
                               ItemsSource="{Binding TimelineNames}"
@@ -362,12 +363,12 @@
                               MinWidth="180"
                               FontSize="14"
                               Margin="4,0,12,0"
-                              materialDesign:HintAssist.Hint="选择目标时间线" />
+                              materialDesign:HintAssist.Hint="{x:Static loc:Texts.AddLinesTimelineHint}" />
 
                     <Button Grid.Column="3"
                             Command="{Binding ImportCsvCommand}"
                             Style="{StaticResource WhiteButton}"
-                            Content="从 CSV 导入"
+                            Content="{x:Static loc:Texts.AddLinesImportCsvButton}"
                             Padding="12,6" />
                 </Grid>
 
@@ -397,7 +398,7 @@
                                               ItemsSource="{Binding DataContext.AllCharacters, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                               SelectedItem="{Binding Character, UpdateSourceTrigger=PropertyChanged}"
                                               DisplayMemberPath="Name"
-                                              materialDesign:HintAssist.Hint="角色"
+                                              materialDesign:HintAssist.Hint="{x:Static loc:Texts.AddLinesCharacterHint}"
                                               Margin="0,0,8,0" />
 
                                     <!-- Serif textbox with colored glow -->
@@ -414,7 +415,7 @@
                                                  AcceptsReturn="True"
                                                  MaxHeight="84"
                                                  VerticalScrollBarVisibility="Auto"
-                                                 materialDesign:HintAssist.Hint="台词文本" />
+                                                 materialDesign:HintAssist.Hint="{x:Static loc:Texts.AddLinesSerifHint}" />
                                     </Border>
 
                                     <!-- Delete button -->
@@ -428,7 +429,7 @@
                                             BorderBrush="{DynamicResource MaterialDesignDivider}"
                                             BorderThickness="1"
                                             Cursor="Hand"
-                                            ToolTip="删除此行"
+                                            ToolTip="{x:Static loc:Texts.AddLinesDeleteTooltip}"
                                             Visibility="{Binding CanDelete, Converter={StaticResource BoolToVisibilityConverter}}">
                                         <TextBlock Text="❌"
                                                    FontSize="14" FontWeight="Bold"
@@ -454,7 +455,7 @@
                 <Border Grid.Row="0"
                         Background="{DynamicResource PrimaryHueLightBrush}"
                         Padding="24,16">
-                    <TextBlock Text="保存到..."
+                    <TextBlock Text="{x:Static loc:Texts.SavePageTitle}"
                                FontSize="20" FontWeight="SemiBold"
                                Foreground="{DynamicResource PrimaryHueDarkBrush}" />
                 </Border>
@@ -465,13 +466,13 @@
                         <!-- Export CSV -->
                         <materialDesign:Card Margin="0,0,0,16" Padding="20">
                             <StackPanel>
-                                <TextBlock Text="导出为 CSV 台本"
+                                <TextBlock Text="{x:Static loc:Texts.SaveExportSectionTitle}"
                                            FontSize="16" FontWeight="SemiBold"
                                            Margin="0,0,0,12" />
 
                                  <Button Command="{Binding ExportCsvCommand}"
                                          Style="{StaticResource WhiteButton}"
-                                         Content="导出到..."
+                                         Content="{x:Static loc:Texts.SaveExportButton}"
                                          IsEnabled="{Binding CanSave}"
                                          Padding="12,6"
                                         HorizontalAlignment="Left" />
@@ -480,9 +481,9 @@
                                            FontSize="13"
                                            Foreground="{DynamicResource MaterialDesignBody}"
                                            TextWrapping="Wrap">
-                                    <Run Text="将保存 "/>
+                                    <Run Text="{x:Static loc:Texts.SaveExportDesc1}"/>
                                     <Run Text="{Binding ValidLineCount, Mode=OneWay}" FontWeight="SemiBold"/>
-                                    <Run Text=" 条台词为 CSV 台本文件。编码格式为 UTF-8 BOM。" />
+                                    <Run Text="{x:Static loc:Texts.SaveExportDesc2}" />
                                 </TextBlock>
 
                                 <TextBlock Margin="0,4,0,0"
@@ -490,7 +491,7 @@
                                            Foreground="{DynamicResource PrimaryHueMidBrush}"
                                            TextWrapping="Wrap"
                                            Visibility="{Binding HasExportPath, Converter={StaticResource BoolToVisibilityConverter}}">
-                                    <Run Text="已保存到 "/>
+                                    <Run Text="{x:Static loc:Texts.SaveExportedTo}"/>
                                     <Run Text="{Binding ExportSavedPath, Mode=OneWay}" FontWeight="SemiBold"/>
                                 </TextBlock>
                             </StackPanel>
@@ -499,7 +500,7 @@
                         <!-- Append to Ymmp -->
                         <materialDesign:Card Padding="20">
                             <StackPanel>
-                                <TextBlock Text="追加到 ymmp 项目"
+                                <TextBlock Text="{x:Static loc:Texts.SaveYmmpAppendSectionTitle}"
                                            FontSize="16" FontWeight="SemiBold"
                                            Margin="0,0,0,12" />
 
@@ -518,19 +519,19 @@
                                             <RowDefinition Height="Auto" />
                                         </Grid.RowDefinitions>
 
-                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="项目路径:" FontWeight="SemiBold" FontSize="12" Margin="0,2" />
+                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static loc:Texts.SaveYmmpPathLabel}" FontWeight="SemiBold" FontSize="12" Margin="0,2" />
                                         <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding YmmpPath}" FontSize="12" Margin="0,2" TextTrimming="CharacterEllipsis" />
 
-                                        <TextBlock Grid.Row="1" Grid.Column="0" Text=" 时 间 线:" FontWeight="SemiBold" FontSize="12" Margin="0,2" />
+                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static loc:Texts.SaveYmmpTimelineLabel}" FontWeight="SemiBold" FontSize="12" Margin="0,2" />
                                         <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding YmmpTimeline}" FontSize="12" Margin="0,2" />
 
-                                        <TextBlock Grid.Row="2" Grid.Column="0" Text="已有物件:" FontWeight="SemiBold" FontSize="12" Margin="0,2" />
+                                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{x:Static loc:Texts.SaveYmmpItemCountLabel}" FontWeight="SemiBold" FontSize="12" Margin="0,2" />
                                         <TextBlock Grid.Row="2" Grid.Column="1" FontSize="12" Margin="0,2">
                                             <Run Text="{Binding YmmpExistingCount, Mode=OneWay}" />
-                                            <Run Text=" 个" />
+                                            <Run Text="{x:Static loc:Texts.SaveYmmpItemsCountUnit}" />
                                         </TextBlock>
 
-                                        <TextBlock Grid.Row="3" Grid.Column="0" Text="起始时点:" FontWeight="SemiBold" FontSize="12" Margin="0,2" />
+                                        <TextBlock Grid.Row="3" Grid.Column="0" Text="{x:Static loc:Texts.SaveYmmpStartTimeLabel}" FontWeight="SemiBold" FontSize="12" Margin="0,2" />
                                         <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding YmmpStartTime}" FontSize="12" Margin="0,2" />
                                     </Grid>
                                 </Border>
@@ -538,14 +539,14 @@
                                  <Button Margin="0,12,0,0"
                                          Command="{Binding AppendToYmmpCommand}"
                                          Style="{StaticResource WhiteButton}"
-                                         Content="追加到 ymmp"
+                                         Content="{x:Static loc:Texts.SaveAppendButton}"
                                          IsEnabled="{Binding CanSave}"
                                          Padding="12,6"
                                         HorizontalAlignment="Left" />
 
                                 <CheckBox Margin="0,8,0,0"
                                           IsChecked="{Binding KeepLinesAfterAppend}"
-                                          Content="在追加后保留台词"
+                                          Content="{x:Static loc:Texts.SaveKeepLines}"
                                           FontSize="12"
                                           Foreground="{DynamicResource MaterialDesignBody}" />
 

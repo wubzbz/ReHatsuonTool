@@ -1,6 +1,7 @@
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using ReHatsuonTool.Models;
 using ReHatsuonTool.Services;
+using ReHatsuonTool.Localization;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
@@ -194,8 +195,8 @@ public class AddLinesViewModel : BaseViewModel
     {
         var dialog = new OpenFileDialog
         {
-            Title = "import CSV",
-            Filter = "CSV file (*.csv)|*.csv|All files (*.*)|*.*"
+            Title = Texts.SaveImportCsvTitle,
+            Filter = Texts.SaveImportCsvFilter
         };
 
         if (dialog.ShowDialog() != true) return;
