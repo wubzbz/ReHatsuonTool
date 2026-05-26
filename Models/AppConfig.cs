@@ -12,7 +12,7 @@ public class AppConfig
 
     private static readonly string ConfigPath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "HatsuonTool",
+        "Re-HatsuonTool",
         "config.json");
 
     // 缓存 JsonSerializerOptions 实例以重用（修复 CA1869）

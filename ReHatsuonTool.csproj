@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -8,9 +8,15 @@
     <Nullable>enable</Nullable>
     <RootNamespace>ReHatsuonTool</RootNamespace>
     <AssemblyName>ReHatsuonTool</AssemblyName>
+    <Version>1.0.0</Version>
     <RestorePackagesPath>..\ReHatsuonTool\packages</RestorePackagesPath>
     <RestoreSources>$(RestoreSources);..\ReHatsuonTool\packages</RestoreSources>
+    <ApplicationIcon>ReHatsuonTool.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="ReHatsuonTool.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
@@ -18,4 +24,11 @@
     <PackageReference Include="pythonnet" Version="3.0.5" />
   </ItemGroup>
 
+  <Target Name="CopyPythonEmbedded" AfterTargets="Publish">
+	<ItemGroup>
+		<PythonFiles Include="$(MSBuildProjectDirectory)\python\**\*" />
+	</ItemGroup>
+	<Copy SourceFiles="@(PythonFiles)" DestinationFiles="@(PythonFiles->'$(PublishDir)\python\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
+	
 </Project>
