@@ -83,6 +83,10 @@ jobs:
             Remove-Item "$sp\$d" -Recurse -Force -ErrorAction SilentlyContinue
           }
 
+      - name: Prepare local NuGet cache
+        shell: pwsh
+        run: New-Item -ItemType Directory -Force -Path packages
+
       - name: Publish (Lite - depends on .NET runtime)
         shell: pwsh
         run: |
