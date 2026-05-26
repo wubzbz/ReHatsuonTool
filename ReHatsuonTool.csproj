@@ -10,7 +10,7 @@
     <AssemblyName>ReHatsuonTool</AssemblyName>
     <Version>1.0.0</Version>
     <RestorePackagesPath>..\ReHatsuonTool\packages</RestorePackagesPath>
-    <RestoreSources>$(RestoreSources);..\ReHatsuonTool\packages</RestoreSources>
+    <RestoreSources>https://api.nuget.org/v3/index.json;..\ReHatsuonTool\packages</RestoreSources>
     <ApplicationIcon>ReHatsuonTool.ico</ApplicationIcon>
   </PropertyGroup>
 
