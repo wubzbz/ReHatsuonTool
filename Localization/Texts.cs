@@ -65,7 +65,7 @@ public static class Texts
     public const string SaveImportCsvTitle = "import CSV";
     public const string SaveImportCsvFilter = "CSV file (*.csv)|*.csv|All files (*.*)|*.*";
     public const string SaveYmmpItemsCountUnit = " 个";
-    public const string SaveYmmpStartTimeFormat = "{0:D2}:{1:D2}:{2:D2}+{3:D2}";
+    public const string SaveYmmpStartTimeFormat = "{0:D2}:{1:D2}:{2:D2}.{3:D2}";
     public const string SaveMessageBoxErrorTitle = "Error";
 
     // Ymmp appender error messages
