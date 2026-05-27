@@ -49,7 +49,7 @@ public static class Texts
     public const string SaveYmmpPathLabel = "项目路径:";
     public const string SaveYmmpTimelineLabel = " 时 间 线:";
     public const string SaveYmmpItemCountLabel = "已有物件:";
-    public const string SaveYmmpStartTimeLabel = "起始时点:";
+    public const string SaveYmmpStartTimeLabel = "追加起点:";
     public const string SaveYmmpNotSet = "（未设置）";
     public const string SaveYmmpValidationFailed = "验证失败";
     public const string SaveAppendSuccess = "已在 {0} 追加 {1} 个语音物件到时间线 \"{2}\"";
@@ -65,7 +65,7 @@ public static class Texts
     public const string SaveImportCsvTitle = "import CSV";
     public const string SaveImportCsvFilter = "CSV file (*.csv)|*.csv|All files (*.*)|*.*";
     public const string SaveYmmpItemsCountUnit = " 个";
-    public const string SaveYmmpStartTimeFormat = "时码：{0:D2}:{1:D2}:{2:D2}.{3:D2} | 帧：{4}";
+    public const string SaveYmmpStartTimeFormat = "时间码：{0:D2}:{1:D2}:{2:D2}.{3:D2}  |  帧数：{4}";
     public const string SaveMessageBoxErrorTitle = "Error";
 
     // Ymmp appender error messages
