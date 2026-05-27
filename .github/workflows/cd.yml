@@ -3,6 +3,9 @@ name: CD
 on:
   push:
     branches: [master]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
 
 jobs:
   build:
@@ -28,6 +31,16 @@ jobs:
           if (-not $ver) { $ver = "0.0.0" }
           echo "version=$ver" >> $env:GITHUB_OUTPUT
           echo "Version: $ver"
+
+      - name: Check existing release
+        shell: pwsh
+        run: |
+          $tag = "refs/tags/v${{ steps.version.outputs.version }}"
+          $existing = $(git ls-remote --tags origin $tag)
+          if ($existing) {
+            Write-Host "Release v${{ steps.version.outputs.version }} already exists — skipping build."
+            exit 0
+          }
 
       - name: Cache Python runtime
         id: cache-python
