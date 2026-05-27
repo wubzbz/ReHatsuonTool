@@ -212,7 +212,7 @@ public class SaveViewModel : BaseViewModel
                 var startTime = FrameToTimeString(lastEnd, fps);
                 return (count.ToString(), startTime);
             }
-            return ("0", "00:00:00:00");
+            return ("0", string.Format(Texts.SaveYmmpStartTimeFormat, 0, 0, 0, 0, 0));
         }
         catch { return ("?", "?"); }
     }
@@ -221,10 +221,11 @@ public class SaveViewModel : BaseViewModel
     {
         if (fps <= 0) fps = 60;
         int totalSeconds = totalFrames / fps;
-        int frames = totalFrames % fps;
+        // int frames = totalFrames % fps;
         int hours = totalSeconds / 3600;
         int minutes = (totalSeconds % 3600) / 60;
         int seconds = totalSeconds % 60;
-        return string.Format(Texts.SaveYmmpStartTimeFormat, hours, minutes, seconds, frames);
+        int secondsFloat = (int)((totalFrames % fps) / (float)fps * 100);
+        return string.Format(Texts.SaveYmmpStartTimeFormat, hours, minutes, seconds, secondsFloat, totalFrames);
     }
 }
