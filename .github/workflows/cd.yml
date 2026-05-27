@@ -50,11 +50,8 @@ jobs:
         shell: pwsh
         working-directory: python
         run: |
-          # Append Lib\site-packages to .pth so pip and packages are importable
-          $pth = "python313._pth"
-          if (-not (Select-String -Path $pth -Pattern "Lib\\site-packages" -SimpleMatch)) {
-            Add-Content -Path $pth -Value "Lib\site-packages"
-          }
+          # Uncomment 'import site' so Lib\site-packages is automatically on sys.path
+          (Get-Content "python313._pth") -replace '#import site', 'import site' | Set-Content "python313._pth"
 
       - name: Setup pip and install packages
         if: steps.cache-python.outputs.cache-hit != 'true'
@@ -71,12 +68,11 @@ jobs:
           .\python.exe -m pip install yukkuri-mandarin[jieba] --no-warn-script-location
           # Cleanup runtime bloat
           Remove-Item get-pip.py -Force
-          Remove-Item pythonw.exe -Force -ErrorAction SilentlyContinue
-          Remove-Item LICENSE.txt -Force -ErrorAction SilentlyContinue
-          Remove-Item python.cat -Force -ErrorAction SilentlyContinue
-          Remove-Item _remote_debugging.pyd -Force -ErrorAction SilentlyContinue
-          Remove-Item _wmi.pyd -Force -ErrorAction SilentlyContinue
           if (Test-Path "Scripts") { Remove-Item "Scripts" -Recurse -Force }
+          # Remove all __pycache__ directories and .pyc/.pyo files
+          Get-ChildItem -Path . -Filter "__pycache__" -Directory -Recurse | Remove-Item -Recurse -Force
+          Get-ChildItem -Path . -Filter "*.pyc" -File -Recurse | Remove-Item -Force
+          Get-ChildItem -Path . -Filter "*.pyo" -File -Recurse | Remove-Item -Force -ErrorAction SilentlyContinue
           # Remove pip/setuptools/wheel from site-packages
           $sp = "Lib\site-packages"
           foreach ($d in @("pip", "pip-*.dist-info", "setuptools", "setuptools-*.dist-info", "wheel", "wheel-*.dist-info")) {
