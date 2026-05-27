@@ -136,11 +136,32 @@
                                    FontWeight="SemiBold"
                                    TextAlignment="Center"
                                    Foreground="White" />
-                        <TextBlock Text="{Binding VersionText}"
-                                   FontSize="12"
+                        <TextBlock FontSize="12"
                                    TextAlignment="Right"
-                                   Foreground="#BAFFFFFF"
-                                   Margin="0,4,0,0" />
+                                   Margin="0,4,0,0"
+                                   MouseLeftButtonDown="VersionText_Click"
+                                   Focusable="False">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="{Binding VersionText}" />
+                                    <Setter Property="Foreground" Value="#BAFFFFFF" />
+                                    <Setter Property="Cursor" Value="Arrow" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding HasUpdate}" Value="True">
+                                            <Setter Property="Text" Value="{Binding UpdateHintText}" />
+                                            <Setter Property="Foreground" Value="#FFD700" />
+                                            <Setter Property="FontWeight" Value="SemiBold" />
+                                            <Setter Property="Effect">
+                                                <Setter.Value>
+                                                    <DropShadowEffect Color="#AA000000" BlurRadius="4" ShadowDepth="1" Opacity="0.6" />
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter Property="Cursor" Value="Hand" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
                     </StackPanel>
                 </Border>
 

@@ -112,4 +112,7 @@ public static class Texts
     public const string PythonDllNotFound = "Python DLL not found. Searched: {0}";
     public const string PythonNetOk = "Python.NET OK. {0}";
     public const string PythonNetError = "Python.NET error: {0}";
+
+    // Update checking
+    public const string UpdateAvailable = "✨点击更新 ← {0}";
 }

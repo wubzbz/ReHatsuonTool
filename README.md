@@ -74,11 +74,16 @@
 ```bash
 cd ReHatsuonTool/python
 
-python.exe -c "import urllib.request; urllib.request.urlretrieve('https://bootstrap.pypa.io/get-pip.py', 'get-pip.py')"
+# 安装 pip
+.\python.exe -c "import urllib.request; urllib.request.urlretrieve('https://bootstrap.pypa.io/get-pip.py', 'get-pip.py')"
+.\python.exe get-pip.py --no-warn-script-location
 
-python.exe get-pip.py --no-warn-script-location
+# 修改 .pth 文件，启用 site 模块以支持第三方包
+(Get-Content $pthFile) -replace '#import site', 'import site' | Set-Content $pthFile
 
-./python.exe -m pip install yukkuri-mandarin[jieba] setuptools wheel
+# 安装 yukkuri-mandarin 和依赖包
+.\python.exe -m pip install setuptools wheel
+.\python.exe -m pip install yukkuri-mandarin[jieba]
 ```
 
 ### 2. 构建
