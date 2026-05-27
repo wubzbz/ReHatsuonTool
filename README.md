@@ -17,7 +17,7 @@
 ## 下载
 
 > [!NOTE]
-> 完整版和轻量版的区别：完整版下载就能用，但是体积较大；轻量版体积小，但需要安装.NET 8.0运行时。两者功能完全相同。
+> 完整版和轻量版的区别：完整版下载就能用，但是体积较大；轻量版体积小，但需要安装.NET 8.0桌面运行时。两者功能完全相同。
 
 ### 完整版
 
@@ -27,7 +27,7 @@
 
 首先确认你电脑上已经安装了 .NET 8.0 Desktop Runtime。如果没有，请在这里下载：
 
-- [.NET 8.0 Desktop Runtime](https://dotnet.microsoft.com/zh-cn/download/dotnet/8.0)
+- [.NET 8.0 Desktop Runtime](https://dotnet.microsoft.com/zh-cn/download/dotnet/thank-you/runtime-desktop-8.0.27-windows-x64-installer)
 
 然后，前往 [Releases](https://github.com/wubzbz/ReHatsuonTool/releases) 下载最新 `ReHatsuonTool-vX.X.X-win-x64-lite.zip`，解压后运行 `ReHatsuonTool.exe`。
 
