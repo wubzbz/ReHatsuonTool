@@ -33,16 +33,19 @@ jobs:
           echo "Version: $ver"
 
       - name: Check existing release
+        id: check-release
         shell: pwsh
         run: |
           $tag = "refs/tags/v${{ steps.version.outputs.version }}"
           $existing = $(git ls-remote --tags origin $tag)
           if ($existing) {
             Write-Host "Release v${{ steps.version.outputs.version }} already exists — skipping build."
+            echo "skip=true" >> $env:GITHUB_OUTPUT
             exit 0
           }
 
       - name: Cache Python runtime
+        if: steps.check-release.outputs.skip != 'true'
         id: cache-python
         uses: actions/cache@v4
         with:
@@ -50,7 +53,7 @@ jobs:
           key: python-3.13.13-embed-v2
 
       - name: Download Python 3.13 embedded
-        if: steps.cache-python.outputs.cache-hit != 'true'
+        if: steps.check-release.outputs.skip != 'true' && steps.cache-python.outputs.cache-hit != 'true'
         shell: pwsh
         run: |
           $zipPath = "${{ runner.temp }}\python-embed.zip"
@@ -59,7 +62,7 @@ jobs:
           Remove-Item $zipPath
 
       - name: Configure embedded Python path
-        if: steps.cache-python.outputs.cache-hit != 'true'
+        if: steps.check-release.outputs.skip != 'true' && steps.cache-python.outputs.cache-hit != 'true'
         shell: pwsh
         working-directory: python
         run: |
@@ -70,7 +73,7 @@ jobs:
           }
 
       - name: Setup pip and install packages
-        if: steps.cache-python.outputs.cache-hit != 'true'
+        if: steps.check-release.outputs.skip != 'true' && steps.cache-python.outputs.cache-hit != 'true'
         shell: pwsh
         working-directory: python
         run: |
@@ -85,7 +88,6 @@ jobs:
           # Cleanup runtime bloat
           Remove-Item get-pip.py -Force
           Remove-Item pythonw.exe -Force -ErrorAction SilentlyContinue
-          Remove-Item LICENSE.txt -Force -ErrorAction SilentlyContinue
           Remove-Item python.cat -Force -ErrorAction SilentlyContinue
           Remove-Item _remote_debugging.pyd -Force -ErrorAction SilentlyContinue
           Remove-Item _wmi.pyd -Force -ErrorAction SilentlyContinue
@@ -97,10 +99,12 @@ jobs:
           }
 
       - name: Prepare local NuGet cache
+        if: steps.check-release.outputs.skip != 'true'
         shell: pwsh
         run: New-Item -ItemType Directory -Force -Path packages
 
       - name: Publish (Lite - depends on .NET runtime)
+        if: steps.check-release.outputs.skip != 'true'
         shell: pwsh
         run: |
           dotnet publish ReHatsuonTool.csproj `
@@ -111,6 +115,7 @@ jobs:
             -o publish-lite
 
       - name: Publish (Full - self-contained)
+        if: steps.check-release.outputs.skip != 'true'
         shell: pwsh
         run: |
           dotnet publish ReHatsuonTool.csproj `
@@ -121,6 +126,7 @@ jobs:
             -o publish-full
 
       - name: Package Lite
+        if: steps.check-release.outputs.skip != 'true'
         shell: pwsh
         run: |
           $version = "${{ steps.version.outputs.version }}"
@@ -130,6 +136,7 @@ jobs:
         id: pkg-lite
 
       - name: Package Full
+        if: steps.check-release.outputs.skip != 'true'
         shell: pwsh
         run: |
           $version = "${{ steps.version.outputs.version }}"
@@ -139,6 +146,7 @@ jobs:
         id: pkg-full
 
       - name: Create Release
+        if: steps.check-release.outputs.skip != 'true'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.version.outputs.version }}
