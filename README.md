@@ -31,6 +31,10 @@
 
 然后，前往 [Releases](https://github.com/wubzbz/ReHatsuonTool/releases) 下载最新 `ReHatsuonTool-vX.X.X-win-x64-lite.zip`，解压后运行 `ReHatsuonTool.exe`。
 
+> [!NOTE]
+> 为什么会有“开发者未知”的安全提示？<br>
+> 因为这个工具是我个人开发的，尚未进行代码签名认证，所以 Windows 可能会显示安全警告。请放心，这个工具是安全的（代码开源，使用Github Actions构建并发布），你可以选择“仍要运行”来使用它。
+
 ## 使用流程
 
 ![usage1](./docs/assets/usage1.png)
