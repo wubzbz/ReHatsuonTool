@@ -17,7 +17,7 @@
 ## 下载
 
 > [!NOTE]
-> 完整版和轻量版的区别：完整版下载就能用，但是体积较大；轻量版体积小，但需要安装.NET 8.0运行时。两者功能完全相同。
+> 完整版和轻量版的区别：完整版下载就能用，但是体积较大；轻量版体积小，但需要安装.NET 8.0桌面运行时。两者功能完全相同。
 
 ### 完整版
 
@@ -27,9 +27,13 @@
 
 首先确认你电脑上已经安装了 .NET 8.0 Desktop Runtime。如果没有，请在这里下载：
 
-- [.NET 8.0 Desktop Runtime](https://dotnet.microsoft.com/zh-cn/download/dotnet/8.0)
+- [.NET 8.0 Desktop Runtime](https://dotnet.microsoft.com/zh-cn/download/dotnet/thank-you/runtime-desktop-8.0.27-windows-x64-installer)
 
 然后，前往 [Releases](https://github.com/wubzbz/ReHatsuonTool/releases) 下载最新 `ReHatsuonTool-vX.X.X-win-x64-lite.zip`，解压后运行 `ReHatsuonTool.exe`。
+
+> [!NOTE]
+> 为什么会有“开发者未知”的安全提示？<br>
+> 因为这个工具是我个人开发的，尚未进行代码签名认证，所以 Windows 可能会显示安全警告。请放心，这个工具是安全的（代码开源，使用Github Actions构建并发布），你可以选择“仍要运行”来使用它。
 
 ## 使用流程
 
