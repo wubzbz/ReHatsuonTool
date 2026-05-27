@@ -17,38 +17,49 @@ public static class CharacterSettingsParser
             if (!root.TryGetProperty("Characters", out var chars) || chars.ValueKind != JsonValueKind.Array)
                 return null;
 
-            int total = chars.GetArrayLength();
-            if (total == 0)
-                return Texts.CharsEmpty;
-
             const int maxShow = 3;
             var sb = new List<string>();
-            int i = 0;
+            int aqTotal = 0;
+            int shown = 0;
+
             foreach (var c in chars.EnumerateArray())
             {
-                if (i >= maxShow) break;
+                // Filter: AquesTalk only
+                string? api = null;
+                if (c.TryGetProperty("Voice", out var voice) && voice.ValueKind == JsonValueKind.Object)
+                    api = voice.TryGetProperty("API", out var a) ? a.GetString() : null;
+
+                if (api?.Contains("AquesTalk", StringComparison.OrdinalIgnoreCase) != true)
+                    continue;
+
+                aqTotal++;
+
+                if (shown >= maxShow)
+                    continue;
 
                 var name = Texts.CharsUnknownName;
                 if (c.TryGetProperty("Name", out var nameEl))
                     name = nameEl.GetString() ?? Texts.CharsUnknownName;
 
                 var voiceInfo = "";
-                if (c.TryGetProperty("Voice", out var voice) && voice.ValueKind == JsonValueKind.Object)
+                if (c.TryGetProperty("Voice", out var voice2) && voice2.ValueKind == JsonValueKind.Object)
                 {
-                    var api = voice.TryGetProperty("API", out var a) ? a.GetString() : null;
-                    var arg = voice.TryGetProperty("Arg", out var r) ? r.GetString() : null;
+                    var arg = voice2.TryGetProperty("Arg", out var r) ? r.GetString() : null;
                     if (!string.IsNullOrEmpty(api))
                         voiceInfo = $"  [{api}{(arg != null ? "/" + arg : "")}]";
                 }
 
                 sb.Add($"    {name}{voiceInfo}");
-                i++;
+                shown++;
             }
 
+            if (aqTotal == 0)
+                return Texts.CharsEmpty;
+
             var lines = string.Join("\n", sb);
-            if (total > maxShow)
-                lines += "\n" + string.Format(Texts.CharsMoreFormat, total - maxShow);
-            return string.Format(Texts.CharsSummaryFormat, total) + "\n" + lines;
+            if (aqTotal > maxShow)
+                lines += "\n" + string.Format(Texts.CharsMoreFormat, aqTotal - maxShow);
+            return string.Format(Texts.CharsSummaryFormat, aqTotal) + "\n" + lines;
         }
         catch
         {
