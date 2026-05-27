@@ -78,7 +78,7 @@ public class SaveViewModel : BaseViewModel
         }
         else
         {
-            YmmpPath = "(not set)";
+            YmmpPath = Texts.SaveYmmpNotSet;
             YmmpTimeline = "?";
             YmmpExistingCount = "?";
             YmmpStartTime = "?";
@@ -225,6 +225,6 @@ public class SaveViewModel : BaseViewModel
         int hours = totalSeconds / 3600;
         int minutes = (totalSeconds % 3600) / 60;
         int seconds = totalSeconds % 60;
-        return $"{hours:D2}:{minutes:D2}:{seconds:D2}+{frames:D2}";
+        return string.Format(Texts.SaveYmmpStartTimeFormat, hours, minutes, seconds, frames);
     }
 }
