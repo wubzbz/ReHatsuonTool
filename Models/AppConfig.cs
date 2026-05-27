@@ -10,12 +10,15 @@ public class AppConfig
     public string? DetectedVersion { get; set; }
     public string? CharacterSettingsPath { get; set; }
 
+    // Update checking
+    public string? LatestVersion { get; set; }
+    public DateTime? LastUpdateCheck { get; set; }
+
     private static readonly string ConfigPath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
         "Re-HatsuonTool",
         "config.json");
 
-    // 缓存 JsonSerializerOptions 实例以重用（修复 CA1869）
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
 
     public static AppConfig Load()
@@ -48,5 +51,28 @@ public class AppConfig
             File.WriteAllText(ConfigPath, json);
         }
         catch { }
+    }
+
+    /// <summary>
+    /// Returns true if at least 24 hours have passed since the last update check.
+    /// </summary>
+    public bool ShouldCheckForUpdate()
+    {
+        if (LastUpdateCheck == null) return true;
+        return (DateTime.UtcNow - LastUpdateCheck.Value).TotalHours >= 24;
+    }
+
+    /// <summary>
+    /// On first run there is no cached LatestVersion — seed it with the current version
+    /// so the user isn't prompted to update immediately.
+    /// </summary>
+    public void InitializeVersionInfo(Version currentVersion)
+    {
+        if (string.IsNullOrEmpty(LatestVersion) || LastUpdateCheck == null)
+        {
+            LatestVersion = currentVersion.ToString(3);
+            LastUpdateCheck = DateTime.UtcNow;
+            Save();
+        }
     }
 }

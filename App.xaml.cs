@@ -1,3 +1,4 @@
+using ReHatsuonTool.ViewModels;
 using System.Text;
 using System.Windows;
 using Python.Runtime;
@@ -13,6 +14,9 @@ public partial class App : Application
 
     protected override void OnExit(ExitEventArgs e)
     {
+        if (MainWindow?.DataContext is MainViewModel vm)
+            vm.CancelAsyncTasks();
+
         try { PythonEngine.Shutdown(); }
         catch { }
         base.OnExit(e);

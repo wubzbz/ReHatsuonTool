@@ -70,4 +70,10 @@ public partial class MainWindow : Window
         _viewModel.Navigate(PageType.Save);
         SwitchPage(SavePage);
     }
+
+    private void VersionText_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        if (_viewModel.HasUpdate)
+            _viewModel.OpenReleasePageCommand.Execute(null);
+    }
 }
