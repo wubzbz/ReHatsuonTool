@@ -95,6 +95,8 @@ cd ReHatsuonTool/python
 dotnet build ReHatsuonTool/ReHatsuonTool.csproj -c Release
 ```
 
+<center><a href="https://github.com/wubzbz/yukkuri-mandarin"><img src="./Images/badge.png" alt="badge" width="200"/></a></center>
+
 ## 许可证
 
 MIT License © 2026 wubzbz

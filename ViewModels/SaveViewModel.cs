@@ -225,7 +225,7 @@ public class SaveViewModel : BaseViewModel
         int hours = totalSeconds / 3600;
         int minutes = (totalSeconds % 3600) / 60;
         int seconds = totalSeconds % 60;
-        int secondsFloat = (int)((totalFrames % fps) / (float)fps * 100);
-        return string.Format(Texts.SaveYmmpStartTimeFormat, hours, minutes, seconds, secondsFloat, totalFrames);
+        int centiSeconds = (int)((totalFrames % fps) / (double)fps * 100);
+        return string.Format(Texts.SaveYmmpStartTimeFormat, hours, minutes, seconds, centiSeconds, totalFrames);
     }
 }
