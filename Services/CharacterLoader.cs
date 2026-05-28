@@ -34,6 +34,9 @@ public static class CharacterLoader
                     arg = voice.TryGetProperty("Arg", out var r) ? r.GetString() : null;
                 }
 
+                if (api?.Contains("AquesTalk", StringComparison.OrdinalIgnoreCase) != true)
+                    continue;
+
                 result.Add(new CharacterInfo(name, color, api, arg));
             }
         }

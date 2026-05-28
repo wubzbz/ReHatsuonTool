@@ -8,7 +8,7 @@
     <Nullable>enable</Nullable>
     <RootNamespace>ReHatsuonTool</RootNamespace>
     <AssemblyName>ReHatsuonTool</AssemblyName>
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
     <RestorePackagesPath>..\ReHatsuonTool\packages</RestorePackagesPath>
     <RestoreSources>https://api.nuget.org/v3/index.json;..\ReHatsuonTool\packages</RestoreSources>
     <ApplicationIcon>Images\ReHatsuonTool.ico</ApplicationIcon>

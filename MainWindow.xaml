@@ -8,7 +8,7 @@
         xmlns:conv="clr-namespace:ReHatsuonTool.Views"
         xmlns:loc="clr-namespace:ReHatsuonTool.Localization"
         mc:Ignorable="d"
-        Title="Re-Hatsuon Tool - 添加普通话语音物件"
+        Title="{x:Static loc:Texts.WindowTitle}"
         Height="610" Width="880"
         MinHeight="610" MinWidth="780"
         WindowStartupLocation="CenterScreen"
@@ -452,7 +452,7 @@
                                             Cursor="Hand"
                                             ToolTip="{x:Static loc:Texts.AddLinesDeleteTooltip}"
                                             Visibility="{Binding CanDelete, Converter={StaticResource BoolToVisibilityConverter}}">
-                                        <TextBlock Text="❌"
+                                        <TextBlock Text="{x:Static loc:Texts.AddLinesDeleteSymbol}"
                                                    FontSize="14" FontWeight="Bold"
                                                    Foreground="#CC3333"
                                                    HorizontalAlignment="Center"
